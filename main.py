@@ -5,6 +5,7 @@ from pokemonStates import PokemonStates as Ps
 from wildPokemon  import WildPokemon as Wp
 from pokemon_attack import PokemonAttack as Pa
 import random
+from bag import Bag as Bg
 
 print(" === Bienvenue dans le monde des Pokémon ! ===\n")
 
@@ -77,8 +78,13 @@ print("Bonjour Professeur CHEN, je viens pour obtenir mon premier pokémon")
 print(f"Bonjour {trainer_name}, tu arrives au bon moment. Tu as le choix entre ces trois pokémon")
 print("Sélectionez le pokémon dont vous souhaitez voir les statistiques")
 
-array = []
+arrayTeamPokemon = []
+arrayBag = []
 choiceConfirm = False
+
+pokeBall = Bg (f"pokeball", "", 5)
+potion = Bg (f"postion", "35 Lp", 5)
+
 
 while not choiceConfirm:
     print("1.Pikachu")
@@ -107,12 +113,17 @@ while not choiceConfirm:
 
     if keepPokemon == 1:
         choiceConfirm=True
-        array.append(array) 
+        arrayTeamPokemon.append(pokemonStats.name) 
         print(f"Parfait ! {pokemonStats.name} rejoint votre équipe !")
     else:
         print("Très bien, vous pourrez choisir un autre Pokémon plus tard.")
                          
 print(f"CHEN: Félicitation {trainer_name}, Tu viens d'obtenir ton premier pokémon")
+print(f"CHEN: Comme je suis gentil, je te donne également 5 pokéballs, 5 potions.")
+arrayBag.append(pokeBall)
+arrayBag.append(potion)
+
+print(f"{trainer_name} recoit 5 pokéballs et 5 potions !")
 print("CHEN: Je te conseil, d'entrainer ton pokémon afin de pouvoir affroter le maitre d'arène d'Azuria")
 print("CHEN: A moins que tu sois sur de toi, et de tenter ta chance dans l'arène qui détient, trois étages avec un dresseur les uns plus fort que les autres !")
 print(f"CHEN: Bonne chance {trainer_name}")
@@ -151,6 +162,7 @@ if roads == 1:
             print("Choisissez une attaque :")
             print("1.Griffe")
             print("2.Rugissement")
+            print("3.Sac")
        
             pokemonFight = int (input("Entrez le numéro de l'attaque que vous voulez effectuer:"))
             if pokemonFight == 1:
@@ -166,8 +178,36 @@ if roads == 1:
                 print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
                 print(f"{wildPokemon.name} voit son attaque baisser {wildPokemon.power} !")
 
+            elif pokemonFight == 3:
+                print("Choisissez un objet:")
+                for i in range(len(arrayBag)):
+                    print(f"{i+1}. {arrayBag[i].object} x{arrayBag[i].quantity}")
+                print("3. Retour")
+                
+                arrayBagObject = int (input("Entrez le numéro de l'objet que vous voulez utiliser:") )
 
-            if wildPokemon.lifePoint <= 0:    
+                if arrayBagObject == 1:
+                    if pokeBall.quantity > 0:
+                        pokeBall.quantity -= 1
+                    print(f"Vous lancez une Pokéball sur {wildPokemon.name} !")
+                    catchChance = random.randint(1, 3)
+                    if catchChance == 1:
+                        print(f"Félicitations ! vous avez capturé {wildPokemon.name} !")
+                        arrayTeamPokemon.append(wildPokemon.name)
+                        endFight = True
+                        break
+                else:
+                    print(f"{wildPokemon} s'est échappé")
+
+                if arrayBagObject == 2:
+                    if potion.quantity > 0:
+                        potion.quantity -= 1
+                        print(f"Vous utiliser une potion sur {playerPokemon} !")
+                        playerPokemon.lifePoint += 35
+                        print(f"{playerPokemon.name} à récupérer {playerPokemon.lifePoint} lp") 
+                 
+                
+            if  wildPokemon.lifePoint <= 0:    
                 endFight = True
                 print(f"{playerPokemon.name} à battu le {wildPokemon.name} sauvage !")
                 break
