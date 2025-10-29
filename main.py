@@ -102,11 +102,11 @@ else:
         if pokemonStatistics == 1:
             pokemonStats = Ps ("Pikachu", "5 Lvl" , "50 LP" , "Electrik", "10")
         elif pokemonStatistics == 2:
-            pokemonStats = Ps ("Salamèche", "5 Lvl" , "60 Lvl", "Fire", "15")
+            pokemonStats = Ps ("Salamèche", "5 Lvl" , "1000 LP", "Fire", "1000")
         elif pokemonStatistics == 3:
-            pokemonStats = Ps ("Bulbizarre","5 Lvl" , "55 Lvl", "Plant", "11")
+            pokemonStats = Ps ("Bulbizarre","5 Lvl" , "55 LP", "Plant", "11")
         elif pokemonStatistics == 4:
-            pokemonStats = Ps ("Carapuce", "5 Lvl" , "70 Lvl" , "Water", "13")
+            pokemonStats = Ps ("Carapuce", "5 Lvl" , "70 LP" , "Water", "13")
 
         print(f"{pokemonStats}")
             
@@ -136,152 +136,321 @@ else:
     print(f"CHEN: Bonne chance {trainer_name}")
 
 
+# Boucle principale des arènes après l'obtention du premier Pokémon
 while True:
-        print("Sélectionez le chemin dont vous souhaitez vous rendre")
-        print("1.Dans les hautes herbes")
-        print("2.Arène d'Azuria")
-        print("3.Arène de Céladopole")
-        print("4.Arène de Cramois'Île")
-        roads = int (input("Entrez le numéro de votre choix pour la sélection du chemin"))
+    print("Sélectionez le chemin dont vous souhaitez vous rendre")
+    print("1.Dans les hautes herbes")
+    print("2.Arène d'Azuria")
+    print("3.Arène de Céladopole")
+    print("4.Arène de Cramois'Île")
+    roads = int(input("Entrez le numéro de votre choix pour la sélection du chemin: "))
 
-        if roads == 1:
-            roadsOption = Rds("Dans les hautes herbes")
-        if roads == 2 :
-            roadsOption = Rds("Arène d'Azuria")
-        if roads == 3 :
-            roadsOption = Rds ("Arène de Céladopole")
-        if roads == 4 :
-            roadsOption = Rds ("Arène de Cramois'Île")
-    
+    # ========================
+    # CHEMIN : Hautes herbes
+    # ========================
+    if roads == 1:
+        roadsOption = Rds("Dans les hautes herbes")
         print(roadsOption)
+        print("Un Pokémon sauvage apparaît ! Souhaitez-vous le combattre ?")
+        print("1.Combattre")
+        print("2.Fuir")
+        meetingPokemon = int(input("Entrez le numéro de votre choix: "))
+        if meetingPokemon == 1:
+            playerPokemon = arrayTeamPokemon[0]
+            wildPokemon = Wp("Rattata", "3 Lvl", "47 LP", "Normal", "7")
+            
+            endFight = False
+            while not endFight:
+                print("Choisissez une attaque :")
+                print("1.Griffe")
+                print("2.Rugissement")
+                print("3.Équipe")
+                print("4.Sac")
+                pokemonFight = int(input("Numéro de l'attaque: "))
 
-        if roads == 1:
-            print("Un pokemon sauvage apparait ! Souhaitez vous le combattre ?")
-            print("1.Combattre")
-            print("2.fuir")
+                if pokemonFight == 1:
+                    pokemonAttack = Pa("Griffe", 1000)
+                    wildPokemon.lifePoint -= pokemonAttack.power
+                    print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
+                    print(f"{wildPokemon.name} perd {pokemonAttack.power} LP !")
 
-            meetingPokemon = int (input("Entrez le numéro de votre choix pour la prise de descision" ))
+                elif pokemonFight == 2:
+                    pokemonAttack = Pa("Rugissement", 0)
+                    wildPokemon.power = max(1, wildPokemon.power - 2)
+                    print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
+                    print(f"{wildPokemon.name} voit son attaque baisser à {wildPokemon.power} !")
 
-            if meetingPokemon == 1:
+                elif pokemonFight == 3:
+                    print("Choisissez un Pokémon:")
+                    for i, pt in enumerate(arrayTeamPokemon):
+                        print(f"{i+1}. {pt.name} {pt.level} {pt.lifePoint} {pt.type} {pt.power}")
+                    arrayTeamPokemons = int(input("Numéro du Pokémon: "))
+                    if 1 <= arrayTeamPokemons <= len(arrayTeamPokemon):
+                        selectedPokemon = arrayTeamPokemon[arrayTeamPokemons - 1]
+                        if selectedPokemon.lifePoint > 0:
+                            playerPokemon = selectedPokemon
+                            print(f"{playerPokemon.name} entre en scène !")
+                        else:
+                            print(f"{selectedPokemon.name} est K.O et ne peut pas combattre !")
 
-                playerPokemon = Ps ("Pikachu", "5 Lvl" , "50 LP" , "Electrik", "10")
-                wildPokemon = Wp ("Rattata", "3 Lvl" , "47 LP" , "Normal", "7")
+                elif pokemonFight == 4:
+                    print("Choisissez un objet :")
+                    for i, obj in enumerate(arrayBag):
+                        print(f"{i+1}. {obj.object} x{obj.quantity}")
+                    arrayBagObject = int(input("Numéro de l'objet: "))
+                    if arrayBagObject == 2 and potion.quantity > 0:
+                        potion.quantity -= 1
+                        playerPokemon.lifePoint += 35
+                        print(f"{playerPokemon.name} récupère {playerPokemon.lifePoint} LP")
 
-                print(f"J'appelle {playerPokemon.name} à l'attaque !")
-                print(f"{wildPokemon.name} rattata Grrr")
+                if wildPokemon.lifePoint <= 0:
+                    endFight = True
+                    print(f"{playerPokemon.name} a battu {wildPokemon.name} !")
+                    break
 
+                # Attaque sauvage
+                randomAttack = random.randint(1, 3)
+                if randomAttack == 1:
+                    wildPokemonAttack = Pa("Rugissement", 0)
+                    playerPokemon.power = max(1, playerPokemon.power - 2)
+                    print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} !")
+                else:
+                    wildPokemonAttack = Pa("Morsure", 7)
+                    playerPokemon.lifePoint -= wildPokemonAttack.power
+                    print(f"{playerPokemon.name} perd {wildPokemonAttack.power} LP")
+
+                if playerPokemon.lifePoint <= 0:
+                    endFight = True
+                    print(f"{wildPokemon.name} a battu {playerPokemon.name} !")
+        else:
+            print("Vous avez choisi de fuir le combat.")
+
+    # ========================
+    # ARÈNE D'AZURIA
+    # ========================
+    if roads == 2:
+        print("Bienvenue dans l'arène d'Azuria !")
+        unlocked_floors = 1
+        while True:
+            print("Sélectionnez l'étage :")
+            for f in range(1, min(unlocked_floors+1, 6)):
+                name = "Premier" if f==1 else "Deuxième" if f==2 else "Troisième" if f==3 else "Quatrième" if f==4 else "Cinquième"
+                print(f"{f}. {name} étage")
+            floor_choice = int(input("Numéro de l'étage : "))
+
+            if floor_choice <= unlocked_floors:
+                if floor_choice == 1: wildPokemon = Wp("Otaria", "8 Lvl", "50 LP", "Water", "7")
+                elif floor_choice == 2: wildPokemon = Wp("Poissirène", "9 Lvl", "55 LP", "Water", "7")
+                elif floor_choice == 3: wildPokemon = Wp("Amonistar", "10 Lvl", "60 LP", "Water", "8")
+                elif floor_choice == 4: wildPokemon = Wp("Têtarte", "11 Lvl", "65 LP", "Water", "9")
+                elif floor_choice == 5: wildPokemon = Wp("Lokhlass", "12 Lvl", "70 LP", "Water", "10")
+
+                print(f"Un dresseur vous défie avec {wildPokemon.name} !")
+
+                playerPokemon = arrayTeamPokemon[0]
                 endFight = False
                 while not endFight:
-                    print("Choisissez une attaque :")
-                    print("1.Griffe")
-                    print("2.Rugissement")
-                    print("3.Equipe")
-                    print("4.Sac")
-            
-                    pokemonFight = int (input("Entrez le numéro de l'attaque que vous voulez effectuer:"))
-                    if pokemonFight == 1:
-                        pokemonAttack = Pa ("Griffe", 10)
-                        wildPokemon.lifePoint -= pokemonAttack.power
-                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
-                        print(f"{wildPokemon.name} perd {pokemonAttack.power} Lp !")
-                        print(f"Lp restants de {wildPokemon.name}: {wildPokemon.lifePoint}")
+                    print("Choisissez une attaque : 1.Griffe 2.Rugissement 3.Équipe 4.Sac")
+                    pokemonFight = int(input("Numéro de l'attaque: "))
 
+                    if pokemonFight == 1:
+                        pokemonAttack = Pa("Griffe", 10)
+                        wildPokemon.lifePoint -= pokemonAttack.power
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} perd {pokemonAttack.power} LP !")
                     elif pokemonFight == 2:
                         pokemonAttack = Pa("Rugissement", 0)
-                        wildPokemon.power = max(1, wildPokemon.power -2)
-                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
-                        print(f"{wildPokemon.name} voit son attaque baisser {wildPokemon.power} !")
-                    
+                        wildPokemon.power = max(1, wildPokemon.power - 2)
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} voit son attaque baisser à {wildPokemon.power} !")
                     elif pokemonFight == 3:
-                        print("choisissez un pokemon:")
-                        for i in range(len(arrayTeamPokemon)):
-                            PokemonTeam = arrayTeamPokemon[i]
-                            print(f"{i+1}. {PokemonTeam.name} {PokemonTeam.level} {PokemonTeam.lifePoint} {PokemonTeam.type} {PokemonTeam.power}")
-                            
-                        arrayTeamPokemons = int (input("Entrez le numéro du pokémon que vous voulez choisir:"))
-                        selectedPokemon = arrayTeamPokemon[arrayTeamPokemons-1]
-                        print(f"Vous avez choisi {selectedPokemon.name} !")
-        
-                        if arrayTeamPokemons == 9:
-                            print("Vous restez avec votre Pokémon actuel.")
-                            continue  # Retour au menu de combat
-
-                            # Vérifie si le choix est valide
+                        print("Choisissez un Pokémon:")
+                        for i, pt in enumerate(arrayTeamPokemon):
+                            print(f"{i+1}. {pt.name} {pt.level} {pt.lifePoint} {pt.type} {pt.power}")
+                        arrayTeamPokemons = int(input("Numéro du Pokémon: "))
                         if 1 <= arrayTeamPokemons <= len(arrayTeamPokemon):
                             selectedPokemon = arrayTeamPokemon[arrayTeamPokemons - 1]
-                        if selectedPokemon.lifePoint <= 0:
-                            print(f"{selectedPokemon.name} est K.O et ne peut pas combattre !")
-                        else:
-                            print(f"\n{selectedPokemon.name} entre en scène !")
-                            playerPokemon = selectedPokemon  
-                            continue  
-                   
+                            if selectedPokemon.lifePoint > 0:
+                                playerPokemon = selectedPokemon
+                                print(f"{playerPokemon.name} entre en scène !")
+                            else:
+                                print(f"{selectedPokemon.name} est K.O et ne peut pas combattre !")
                     elif pokemonFight == 4:
-                        print("Choisissez un objet:")
-                        for i in range(len(arrayBag)):
-                            print(f"{i+1}. {arrayBag[i].object} x{arrayBag[i].quantity}")
-                        print("3. Retour")
-                        
-                        arrayBagObject = int (input("Entrez le numéro de l'objet que vous voulez utiliser:"))
+                        print("Choisissez un objet :")
+                        for i, obj in enumerate(arrayBag):
+                            print(f"{i+1}. {obj.object} x{obj.quantity}")
+                        arrayBagObject = int(input("Numéro de l'objet: "))
+                        if arrayBagObject == 2 and potion.quantity > 0:
+                            potion.quantity -= 1
+                            playerPokemon.lifePoint += 35
+                            print(f"{playerPokemon.name} récupère {playerPokemon.lifePoint} LP")
 
-                        if arrayBagObject == 1:
-                            if pokeBall.quantity > 0:
-                                pokeBall.quantity -= 1
-                            print(f"Vous lancez une Pokéball sur {wildPokemon.name} !")
-                            catchChance = random.randint(1, 3)
-                            if catchChance == 1:
-                                print(f"Félicitations ! vous avez capturé {wildPokemon.name} !")
-                                arrayTeamPokemon.append(wildPokemon)
-                                endFight = True
-                                continue
-                        else:
-                            print(f"{wildPokemon} s'est échappé")
-
-                        if arrayBagObject == 2:
-                            if potion.quantity > 0:
-                                potion.quantity -= 1
-                                print(f"Vous utiliser une potion sur {playerPokemon} !")
-                                playerPokemon.lifePoint += 35
-                                print(f"{playerPokemon.name} à récupérer {playerPokemon.lifePoint} lp") 
-                        
-                        
-                    if  wildPokemon.lifePoint <= 0:    
+                    if wildPokemon.lifePoint <= 0:
                         endFight = True
-                        print(f"{playerPokemon.name} à battu le {wildPokemon.name} sauvage !")
-                        continue
-                    
-                    randomAttack = random.randint(1, 3)
+                        print(f"{playerPokemon.name} a battu {wildPokemon.name} !")
+                        if unlocked_floors < 5: unlocked_floors += 1
+                        break
 
+                    # Attaque du Pokémon adverse
+                    randomAttack = random.randint(1, 3)
                     if randomAttack == 1:
-                        wildPokemonAttack = Pa ("Rugissement", 0)
-                        playerPokemon.power = max(1, playerPokemon.power -2)
-                        print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} ! ")
-                        print(f"{playerPokemon.name} voit son attaque baisser {playerPokemon.power} !")
+                        wildPokemonAttack = Pa("Rugissement", 0)
+                        playerPokemon.power = max(1, playerPokemon.power - 2)
+                        print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} !")
                     else:
-                        wildPokemonAttack = Pa ("Morsure", 7)
-                        print(f"{wildPokemon.name} riposte !")
-                        print (f"{wildPokemon.name} attaque avec Morsure ! ")
+                        wildPokemonAttack = Pa("Morsure", 7)
                         playerPokemon.lifePoint -= wildPokemonAttack.power
-                        print(f"{playerPokemon.name} perd {wildPokemonAttack} Lp")
-                        print(f"PV restants de {playerPokemon.name} : {playerPokemon.lifePoint}")
-                    
+                        print(f"{playerPokemon.name} perd {wildPokemonAttack.power} LP")
                     if playerPokemon.lifePoint <= 0:
                         endFight = True
-                        print(f"{wildPokemon.name} à battu {playerPokemon.name} ! ")
-                        continue
-                    
-            elif meetingPokemon == 2:
-                print("Vous avez choisi de fuir le combat.")
+                        print(f"{wildPokemon.name} a battu {playerPokemon.name} !")
 
-        else:
-            print("Bienvenue dans l'arène d'Azuria !")
+    # ========================
+    # ARÈNE DE CÉLADÓPOLE
+    # ========================
+    if roads == 3:
+        print("Bienvenue dans l'arène de Céladopole !")
+        unlocked_floors = 1
+        while True:
+            print("Sélectionnez l'étage :")
+            for f in range(1, min(unlocked_floors+1, 4)):
+                name = "Premier" if f==1 else "Deuxième" if f==2 else "Troisième" if f==3 else "Quatrième" if f==4 else "Cinquième"
+                print(f"{f}. {name} étage")
+            floor_choice = int(input("Numéro de l'étage : "))
 
-        if roads == 2:
-            print("Garisson : Bienvenue dans l'arène d'Azuria !")
-            print(f"{trainer_name}: Je vais enfin affronter, mon premier maitre d'arène.")
-            print(f"Garisson : {trainer_name} pour gagner il va falloir que tu me rejoins au Se combat . Je choisi Dracofeu ! et mon adversaire bulbizarre !")
+            if floor_choice <= unlocked_floors:
+                if floor_choice == 1: wildPokemon = Wp("Herbizarre", "7 Lvl", "50 LP", "Plant", "8")
+                elif floor_choice == 2: wildPokemon = Wp("Rafflesia", "8 Lvl", "55 LP", "Plant", "9")
+                elif floor_choice == 3: wildPokemon = Wp("Joliflor", "9 Lvl", "60 LP", "Plant", "10")
+                elif floor_choice == 4: wildPokemon = Wp("Mystherbe", "9 Lvl", "60 LP", "Plant", "10")
+                elif floor_choice == 5: wildPokemon = Wp("Bulbizarre", "9 Lvl", "60 LP", "Plant", "10")
+                print(f"Un dresseur vous défie avec {wildPokemon.name} !")
 
-                
-#print("Je vais affronter, mon premier maitre d'arène qui se nomme Garisson.")
-#print("je franchi les portes de l'arène et défi garisson en duel afin de pouvoir remporter mon premier badge")
-#print("Se combat nécessite l'affrontemant de 1 Pokémon. Je choisi Dracofeu ! et mon adversaire bulbizarre !")
+                playerPokemon = arrayTeamPokemon[0]
+                endFight = False
+                while not endFight:
+                    print("Choisissez une attaque : 1.Griffe 2.Rugissement 3.Équipe 4.Sac")
+                    pokemonFight = int(input("Numéro de l'attaque: "))
+
+                    if pokemonFight == 1:
+                        pokemonAttack = Pa("Griffe", 10)
+                        wildPokemon.lifePoint -= pokemonAttack.power
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} perd {pokemonAttack.power} LP !")
+                    elif pokemonFight == 2:
+                        pokemonAttack = Pa("Rugissement", 0)
+                        wildPokemon.power = max(1, wildPokemon.power - 2)
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} voit son attaque baisser à {wildPokemon.power} !")
+                    elif pokemonFight == 3:
+                        print("Choisissez un Pokémon:")
+                        for i, pt in enumerate(arrayTeamPokemon):
+                            print(f"{i+1}. {pt.name} {pt.level} {pt.lifePoint} {pt.type} {pt.power}")
+                        arrayTeamPokemons = int(input("Numéro du Pokémon: "))
+                        if 1 <= arrayTeamPokemons <= len(arrayTeamPokemon):
+                            selectedPokemon = arrayTeamPokemon[arrayTeamPokemons - 1]
+                            if selectedPokemon.lifePoint > 0:
+                                playerPokemon = selectedPokemon
+                                print(f"{playerPokemon.name} entre en scène !")
+                            else:
+                                print(f"{selectedPokemon.name} est K.O et ne peut pas combattre !")
+                    elif pokemonFight == 4:
+                        print("Choisissez un objet :")
+                        for i, obj in enumerate(arrayBag):
+                            print(f"{i+1}. {obj.object} x{obj.quantity}")
+                        arrayBagObject = int(input("Numéro de l'objet: "))
+                        if arrayBagObject == 2 and potion.quantity > 0:
+                            potion.quantity -= 1
+                            playerPokemon.lifePoint += 35
+                            print(f"{playerPokemon.name} récupère {playerPokemon.lifePoint} LP")
+
+                    if wildPokemon.lifePoint <= 0:
+                        endFight = True
+                        print(f"{playerPokemon.name} a battu {wildPokemon.name} !")
+                        if unlocked_floors < 3: unlocked_floors += 1
+                        break
+
+                    randomAttack = random.randint(1, 3)
+                    if randomAttack == 1:
+                        wildPokemonAttack = Pa("Rugissement", 0)
+                        playerPokemon.power = max(1, playerPokemon.power - 2)
+                        print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} !")
+                    else:
+                        wildPokemonAttack = Pa("Morsure", 7)
+                        playerPokemon.lifePoint -= wildPokemonAttack.power
+                        print(f"{playerPokemon.name} perd {wildPokemonAttack.power} LP")
+                    if playerPokemon.lifePoint <= 0:
+                        endFight = True
+                        print(f"{wildPokemon.name} a battu {playerPokemon.name} !")
+
+    # ========================
+    # ARÈNE DE CRAMOIS'ÎLE
+    # ========================
+    if roads == 4:
+        print("Bienvenue dans l'arène de Cramois'Île !")
+        unlocked_floors = 1
+        while True:
+            print("Sélectionnez l'étage :")
+            for f in range(1, min(unlocked_floors+1, 4)):
+                name = "Premier" if f==1 else "Deuxième" if f==2 else "Troisième"
+                print(f"{f}. {name} étage")
+            floor_choice = int(input("Numéro de l'étage : "))
+
+            if floor_choice <= unlocked_floors:
+                if floor_choice == 1: wildPokemon = Wp("Salamèche", "8 Lvl", "50 LP", "Fire", "9")
+                elif floor_choice == 2: wildPokemon = Wp("Reptincel", "9 Lvl", "55 LP", "Fire", "10")
+                elif floor_choice == 3: wildPokemon = Wp("Dracaufeu", "10 Lvl", "60 LP", "Fire", "12")
+                elif floor_choice == 4: wildPokemon = Wp("Caninos", "10 Lvl", "60 LP", "Fire", "12")
+                elif floor_choice == 5: wildPokemon = Wp("Feunard", "10 Lvl", "60 LP", "Fire", "12")
+                print(f"Un dresseur vous défie avec {wildPokemon.name} !")
+
+                playerPokemon = arrayTeamPokemon[0]
+                endFight = False
+                while not endFight:
+                    print("Choisissez une attaque : 1.Griffe 2.Rugissement 3.Équipe 4.Sac")
+                    pokemonFight = int(input("Numéro de l'attaque: "))
+
+                    if pokemonFight == 1:
+                        pokemonAttack = Pa("Griffe", 10)
+                        wildPokemon.lifePoint -= pokemonAttack.power
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} perd {pokemonAttack.power} LP !")
+                    elif pokemonFight == 2:
+                        pokemonAttack = Pa("Rugissement", 0)
+                        wildPokemon.power = max(1, wildPokemon.power - 2)
+                        print(f"{playerPokemon.name} utilise {pokemonAttack.attack} ! {wildPokemon.name} voit son attaque baisser à {wildPokemon.power} !")
+                    elif pokemonFight == 3:
+                        print("Choisissez un Pokémon:")
+                        for i, pt in enumerate(arrayTeamPokemon):
+                            print(f"{i+1}. {pt.name} {pt.level} {pt.lifePoint} {pt.type} {pt.power}")
+                        arrayTeamPokemons = int(input("Numéro du Pokémon: "))
+                        if 1 <= arrayTeamPokemons <= len(arrayTeamPokemon):
+                            selectedPokemon = arrayTeamPokemon[arrayTeamPokemons - 1]
+                            if selectedPokemon.lifePoint > 0:
+                                playerPokemon = selectedPokemon
+                                print(f"{playerPokemon.name} entre en scène !")
+                            else:
+                                print(f"{selectedPokemon.name} est K.O et ne peut pas combattre !")
+                    elif pokemonFight == 4:
+                        print("Choisissez un objet :")
+                        for i, obj in enumerate(arrayBag):
+                            print(f"{i+1}. {obj.object} x{obj.quantity}")
+                        arrayBagObject = int(input("Numéro de l'objet: "))
+                        if arrayBagObject == 2 and potion.quantity > 0:
+                            potion.quantity -= 1
+                            playerPokemon.lifePoint += 35
+                            print(f"{playerPokemon.name} récupère {playerPokemon.lifePoint} LP")
+
+                    if wildPokemon.lifePoint <= 0:
+                        endFight = True
+                        print(f"{playerPokemon.name} a battu {wildPokemon.name} !")
+                        if unlocked_floors < 3: unlocked_floors += 1
+                        break
+
+                    randomAttack = random.randint(1, 3)
+                    if randomAttack == 1:
+                        wildPokemonAttack = Pa("Rugissement", 0)
+                        playerPokemon.power = max(1, playerPokemon.power - 2)
+                        print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} !")
+                    else:
+                        wildPokemonAttack = Pa("Morsure", 7)
+                        playerPokemon.lifePoint -= wildPokemonAttack.power
+                        print(f"{playerPokemon.name} perd {wildPokemonAttack.power} LP")
+                    if playerPokemon.lifePoint <= 0:
+                        endFight = True
+                        print(f"{wildPokemon.name} a battu {playerPokemon.name} !")
