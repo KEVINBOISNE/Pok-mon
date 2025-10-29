@@ -1,8 +1,10 @@
 from pokemonTrainer import PokemonTrainer as Train
 from difficultyMode import DifficultyMode as Dm
 from roads import Roads as Rds
-from pokemon_states import PokemonStates as Ps
-import game_class
+from pokemonStates import PokemonStates as Ps
+from wildPokemon  import WildPokemon as Wp
+from pokemon_attack import PokemonAttack as Pa
+import random
 
 print(" === Bienvenue dans le monde des Pokémon ! ===\n")
 
@@ -86,13 +88,13 @@ while not choiceConfirm:
 
     pokemonStatistics = int (input("Entrez le numéro de votre choix pour la sélection du pokémon" ))
     if pokemonStatistics == 1:
-        pokemonStats = Ps ("Pikachu", "5 Lvl" , "50 LP" , "Electrik")
-    if pokemonStatistics == 2:
-        pokemonStats = Ps ("Salamèche", "5 Lvl" , "60 Lvl", "Fire")
-    if pokemonStatistics == 3:
-        pokemonStats = Ps ("Bulbizarre","5 Lvl" , "55 Lvl", "Plant")
-    if pokemonStatistics == 4:
-        pokemonStats = Ps ("Carapuce", "5 Lvl" , "70 Lvl" , "Water")
+        pokemonStats = Ps ("Pikachu", "5 Lvl" , "50 LP" , "Electrik", "10")
+    elif pokemonStatistics == 2:
+        pokemonStats = Ps ("Salamèche", "5 Lvl" , "60 Lvl", "Fire", "15")
+    elif pokemonStatistics == 3:
+        pokemonStats = Ps ("Bulbizarre","5 Lvl" , "55 Lvl", "Plant", "11")
+    elif pokemonStatistics == 4:
+        pokemonStats = Ps ("Carapuce", "5 Lvl" , "70 Lvl" , "Water", "13")
 
     print(f"{pokemonStats}")
         
@@ -112,9 +114,9 @@ while not choiceConfirm:
                          
 print(f"CHEN: Félicitation {trainer_name}, Tu viens d'obtenir ton premier pokémon")
 print("CHEN: Je te conseil, d'entrainer ton pokémon afin de pouvoir affroter le maitre d'arène d'Azuria")
-print("CHEN: A moins que tu sois sur de toi et de tenté ta chance dans l'arène qui détient, trois étages avec un dresseur les uns plus fort que les autres !")
+print("CHEN: A moins que tu sois sur de toi, et de tenter ta chance dans l'arène qui détient, trois étages avec un dresseur les uns plus fort que les autres !")
 print(f"CHEN: Bonne chance {trainer_name}")
-print("Je dois me rendre chez le professeur CHEN obtenir mon premier Pokémon")
+
 
 print("Sélectionez le chemin dont vous souhaitez vous rendre")
 print("1.Dans les hautes herbes")
@@ -124,15 +126,84 @@ roads = int (input("Entrez le numéro de votre choix pour la sélection du chemi
 
 if roads == 1:
     roadsOption = Rds("Dans les hautes herbes")
-if roads == 2:
+elif roads == 2:
    roadsOption = Rds ("Arène d'Azuria")
 
 print(roadsOption)
 
+if roads == 1:
+    print("Un pokemon sauvage apparait ! Souhaitez vous le combattre ?")
+    print("1.Combattre")
+    print("2.fuir")
+
+    meetingPokemon = int (input("Entrez le numéro de votre choix pour la prise de descision" ))
+
+    if meetingPokemon == 1:
+
+        playerPokemon = Ps ("Pikachu", "5 Lvl" , "50 LP" , "Electrik", "10")
+        wildPokemon = Wp ("Rattata", "3 Lvl" , "47 LP" , "Normal", "7")
+
+        print(f"J'appelle {playerPokemon.name} à l'attaque !")
+        print(f"{wildPokemon.name} rattata Grrr")
+
+        endFight = False
+        while not endFight:
+            print("Choisissez une attaque :")
+            print("1.Griffe")
+            print("2.Rugissement")
+       
+            pokemonFight = int (input("Entrez le numéro de l'attaque que vous voulez effectuer:"))
+            if pokemonFight == 1:
+                pokemonAttack = Pa ("Griffe", 10)
+                wildPokemon.lifePoint -= pokemonAttack.power
+                print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
+                print(f"{wildPokemon.name} perd {pokemonAttack.power} Lp !")
+                print(f"Lp restants de {wildPokemon.name}: {wildPokemon.lifePoint}")
+
+            elif pokemonFight == 2:
+                pokemonAttack = Pa("Rugissement", 0)
+                wildPokemon.power = max(1, wildPokemon.power -2)
+                print(f"{playerPokemon.name} utilise {pokemonAttack.attack} !")
+                print(f"{wildPokemon.name} voit son attaque baisser {wildPokemon.power} !")
 
 
+            if wildPokemon.lifePoint <= 0:    
+                endFight = True
+                print(f"{playerPokemon.name} à battu le {wildPokemon.name} sauvage !")
+                break
+            
+            randomAttack = random.randint(1, 3)
+
+            if randomAttack == 1:
+                wildPokemonAttack = Pa ("Rugissement", 0)
+                playerPokemon.power = max(1, playerPokemon.power -2)
+                print(f"{wildPokemon.name} utilise {wildPokemonAttack.attack} ! ")
+                print(f"{playerPokemon.name} voit son attaque baisser {playerPokemon.power} !")
+            else:
+                wildPokemonAttack = Pa ("Morsure", 7)
+                print(f"{wildPokemon.name} riposte !")
+                print (f"{wildPokemon.name} attaque avec Morsure ! ")
+                playerPokemon.lifePoint -= wildPokemonAttack.power
+                print(f"{playerPokemon.name} perd {wildPokemonAttack} Lp")
+                print(f"PV restants de {playerPokemon.name} : {playerPokemon.lifePoint}")
+            
+
+            if playerPokemon.lifePoint <= 0:
+                endFight = True
+                print(f"{wildPokemon.name} à battu {playerPokemon.name} ! ")
+                break
+
+    elif meetingPokemon == 2:
+        print("Vous avez choisi de fuir le combat.")
+
+else:
+    print("Bienvenue dans l'arène d'Azuria !")
 
 
+    
+   
+
+                
 #print("Je vais affronter, mon premier maitre d'arène qui se nomme Garisson.")
 #print("je franchi les portes de l'arène et défi garisson en duel afin de pouvoir remporter mon premier badge")
 #print("Se combat nécessite l'affrontemant de 1 Pokémon. Je choisi Dracofeu ! et mon adversaire bulbizarre !")
