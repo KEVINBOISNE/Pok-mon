@@ -1,6 +1,6 @@
 from function_bag import function_bag as Fb, use_item as UseItem
 from pokemon_attack import PokemonAttack as Pa
-from pokemon_states import PokemonStates as Ps
+from pokemon_stats import PokemonStats as Ps
 import random
 
 def arene(arrayTeamPokemon, arrayBag, arene):
