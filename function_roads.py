@@ -1,7 +1,7 @@
 from roads import Roads as Rds
 import random
 from pokemon_attack import PokemonAttack as Pa
-from pokemon_states import PokemonStates as Ps
+from pokemon_stats import PokemonStats as Ps
 from function_bag import use_item as UseItem
 from function_arenes import arene as Arn
 
