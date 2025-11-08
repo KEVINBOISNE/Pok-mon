@@ -8,12 +8,6 @@ def function_bag(arrayBag):
 
 
 def use_item(arrayBag, playerPokemon, wildPokemon, arrayTeamPokemon):
-    """
-    Utilisation d'un objet depuis le sac.
-    playerPokemon : le Pokémon actuellement en combat
-    wildPokemon : le Pokémon sauvage à capturer (optionnel)
-    arrayTeamPokemon : la team du joueur pour ajouter un Pokémon capturé
-    """
     print("Choisissez un objet :")
     for i, obj in enumerate(arrayBag):
         print(f"{i+1}. {obj.object} x{obj.quantity}")
@@ -59,4 +53,4 @@ def use_item(arrayBag, playerPokemon, wildPokemon, arrayTeamPokemon):
             print("Impossible de lancer la Pokéball ici.")
 
     else:
-        print("Cet objet n’est plus disponible !")
+        print("Cet objet n'est plus disponible !")
