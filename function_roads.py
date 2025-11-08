@@ -6,12 +6,7 @@ from function_bag import use_item as UseItem
 from function_arenes import arene as Arn
 
 def function_grass(arrayTeamPokemon, arrayBag, arenes):
-    """
-    Fonction principale des routes et hautes herbes :
-    - Permet au joueur de choisir où aller (hautes herbes ou arènes)
-    - Lance les combats Pokémon sauvages dans les herbes
-    - Appelle les arènes correspondantes
-    """
+
     while True:
         print("\n=== Sélectionnez le chemin dont vous souhaitez vous rendre : ===")
         print("1. Dans les hautes herbes")
