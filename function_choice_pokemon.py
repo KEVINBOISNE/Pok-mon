@@ -21,7 +21,7 @@ def function_choice_pokemon():
             elif pokemonStatistics == 1:
                 pokemonStats = Ps("Pikachu", "5 Lvl", "50 LP", "Electrik", "10")
             elif pokemonStatistics == 2:
-                pokemonStats = Ps("Salamèche", "5 Lvl", "1000 LP", "Fire", "1000")
+                pokemonStats = Ps("Salamèche", "5 Lvl", "75 LP", "Fire", "16")
             elif pokemonStatistics == 3:
                 pokemonStats = Ps("Bulbizarre", "5 Lvl", "55 LP", "Plant", "11")
             elif pokemonStatistics == 4:
