@@ -1,11 +1,11 @@
-from pokemon_states import PokemonStates as Ps
+from pokemon_stats import PokemonStats as Ps
 
 def function_choice_pokemon():
     arrayTeamPokemon = []
     choiceConfirm = False
 
     while not choiceConfirm:
-        print("\nChoisissez votre Pokémon :")
+        print("\n === Choisissez votre Pokémon : === \n")
         print("1. Pikachu")
         print("2. Salamèche")
         print("3. Bulbizarre")
@@ -13,10 +13,10 @@ def function_choice_pokemon():
         print("0. Quitter le jeu")
 
         try:
-            pokemonStatistics = int(input("Entrez le numéro de votre choix (0-4) : "))
+            pokemonStatistics = int(input("Entrez le numéro de votre choix (0-4) :"))
 
             if pokemonStatistics == 0:
-                print("A bientôt, futur dresseur !")
+                print("A bientôt, futur dresseur !\n")
                 exit()
             elif pokemonStatistics == 1:
                 pokemonStats = Ps("Pikachu", "5 Lvl", "50 LP", "Electrik", "10")
