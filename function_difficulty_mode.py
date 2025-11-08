@@ -2,7 +2,7 @@ from difficulty_mode import DifficultyMode as Dm
 
 def function_difficulty_mode():
 
-    print("Choisiez la difficulté")
+    print("=== Choisiez la difficulté ===")
     print("1.Easy")
     print("2.Normal")
     print("3.Hard")
