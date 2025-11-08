@@ -115,7 +115,7 @@ def function_grass(arrayTeamPokemon, arrayBag, arenes):
             else:
                 print("Vous avez choisi de fuir le combat.")
 
-        # === ARÈNES ===
+        # === ARÈNES ==
         elif roads in [2, 3, 4]:
             Arn(arrayTeamPokemon, arrayBag, arenes[roads])
 
