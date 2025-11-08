@@ -1,7 +1,7 @@
 from pokemon_trainer import PokemonTrainer as Train
 
 def choicePokemonTrainer():
-    print("Sélectionnez votre dresseur Pokémon :")
+    print("=== Sélectionnez votre dresseur Pokémon : ===")
     print("1. Sacha")
     print("2. Pierre")
     print("3. Ondine")
